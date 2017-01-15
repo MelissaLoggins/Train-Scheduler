@@ -9,22 +9,29 @@
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
 
-<link rel="stylesheet" type="text/css" href="assets/style.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+</head>
+
+<script src="javascript/moment.js"></script>
+
 <body>
 <!-- Header -->
 <div class="container">
 	<div class="row">
 		<div class="text-center jumbotron" id="jumbotron">
-			<h1 class="text-center">Train Scheduler</h1>
+			<h1 class="text-center">Administration Station</h1>
 			<h3 class="text-center">The time is now.</h3>
 		</div>
 	</div>
 
 <!-- Schedule -->
 <div class="row">
-	<div class="panel panel-default">
+	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h3 class="panel-title">Current Train Schedule</h3>
 		</div>
@@ -39,7 +46,7 @@
 							<th>Minutes Away</th>
 						</tr>
 					</thead>
-					<tbody id='scheduleTable'></tbody>
+					<tbody id="trainHistory"></tbody>
 				</table>
 			</div>
 		</div>
@@ -47,7 +54,7 @@
 
 <!-- Add Train Form -->
 	<div class="row">
-		<div class="panel panel-default">
+		<div class="panel panel-info">
 			<div class="panel-heading">
 				<h3 class="panel-title">Add Train</h3>
 			</div>
@@ -69,7 +76,7 @@
 						<label for="text">Frequency (min)</label>
 						<textarea class="form-control" rows="5" id="frequencyInput"></textarea>
 					</div>
-					<button type="submit" class="btn btn-default" id="addUser">Submit</button>
+					<button type="submit" class="btn btn-default" id="addTrain">Submit</button>
 
 				</form>
 			</div>
@@ -77,9 +84,10 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
-<script type="text/javascript" src="assets/javascript/app.js"></script>
+
+<script type="text/javascript" src="javascript/logic.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
 
 
 </body>
