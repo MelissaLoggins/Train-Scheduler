@@ -1,3 +1,5 @@
+$(document).ready(function() { 
+
 // Initialize Firebase
   var config = {
     apiKey: "AIzaSyDBCt45kn53tBpA4PA32ZuXkcVDXrNvlaM",
@@ -7,86 +9,81 @@
     messagingSenderId: "98588375073"
   };
   firebase.initializeApp(config);
-  var trainName;
-  var destination;
-  var firstTrainTime;
-  var frequency;
-
-
-  //the current time.
-  var currentTime = moment();
- 
 
   //Firebase reference.
   var database = firebase.database();
 
-  // function-minutes away.
-  function time(firstTrainTime, frequency) {
-    firstTrainTime = moment(firstTrainTime, "HH:mm");
-    frequency = parseInt(frequency);
-    firstTrainDate = moment(firstTrainTime, "H mm");
-    a = moment().diff(moment.utc(firstTrainDate), " minutes");
-    b = a % frequency;
-    c = frequency - b;
-
-    return c;
-  }
-
-  // Submit event.
 	$("#addTrain").on("click", function() {
 
   	//Get the values from the text box.
-  	trainName	= $("#trainNameInput").val().trim();
-  	destination = $("#destinationInput").val().trim();
-  	firstTrainTime = $("#firstTrainTimeInput").val().trim();
-  	frequency = $("#frequencyInput").val().trim();
-  	console.log(trainName);
-    console.log(destination);
-    console.log(firstTrainTime);
-    console.log(frequency);
+  	var trainName	= $("#trainNameInput").val().trim();
+  	var destination = $("#destinationInput").val().trim();
+  	var firstTrainTime = $("#firstTrainTimeInput").val().trim();
+    var frequency = $("#frequencyInput").val().trim();
+  	  console.log(trainName);
+      console.log(destination);
+      console.log(firstTrainTime);
+      console.log(frequency);
 
+    // Create temp train data
+    var newTrain = {
+      name: trainName,
+      destination: destination,
+      firstTrainTime: firstTrainTime,
+      frequency: frequency
+    } 
 
     // Push to Firebase.
-    database.ref().push({
-    train: trainName,
-    where: destination,
-    time: firstTrainTime,
-    when: frequency
-    });
+      database.ref().push(newTrain); 
 
     
   // Empty the form.
-  $("#trainNameInput").val(" ");
-  $("#destination").val(" ");
-  $("#firstTrainTime").val(" ");
-  $("#frequency").val(" ");
+  $("#trainNameInput").val("");
+  $("#destinationInput").val("");
+  $("#firstTrainTimeInput").val("");
+  $("#frequencyInput").val("");
 
-  // that return false thing.
     return false;
   });  
 
-  database.ref().on("child_added", function(childSnapshot) {
-  	console.log(childSnapshot.val().name);
+  database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+    var newTrain = childSnapshot.val();
+  	console.log("Previous Post ID: " + prevChildKey);
+    var tFrequency = 15;
+    var tFrequency = parseInt(newTrain.frequency);
+    var firstTime = newTrain.firstTrainTime;
 
-  $("#trainSchedule").append("<div class='well'><span> " + childSnapshot.val().name +
-     " </span><span> " + childSnapshot.val().destination +
-     " </span><span> " + childSnapshot.val().firstTrainTime + 
-     " </span><span> " + childSnapshot.val().frequency + " </span></div>");
+    // First Time (pushed back 1 year to make sure it comes before current time) 
+    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+      console.log(firstTimeConverted);
 
-}, function(errorObject) {
-  console.log("Errors handled: " + errorObject.code);
-});	
+    var currentTime = moment();
+      console.log("Current time: " + moment(currentTime).format("hh:mm"));
+     
+    var timeDiff = moment().diff(moment.utc(firstTimeConverted), "minutes");
+      console.log("Time difference: " + timeDiff);  
+
+    // Remainder
+    var remainder = timeDiff % tFrequency;
+      console.log(remainder);
+
+    // Minutes away
+    var tminutesTillTrain = tFrequency - remainder;
+      console.log("Minutes Away: " + tminutesTillTrain); 
+
+    // Next train
+    var nextTrain = moment().add(tminutesTillTrain, "minutes");
+      console.log("Arrival time: " + moment(nextTrain).format("hh:mm"));
+
+      console.log(newTrain.destination);
+
+  $("#trainSchedule").append("<tr><td>" + newTrain.name + "</td><td>" + newTrain.destination + "</td><td>" + newTrain.firstTrainTime + "</td><td>" + newTrain.frequency + "min </td><td>" + moment(nextTrain).format("hh:mm") + "</td><td>" + tminutesTillTrain + "min" + "</td></tr>");  
+
+});
+});  
+
 
   
 
   
 
-  // that return false thing.
-
-  // grab the info from Firebase
-
-  // figure the minutes away the train is
-
-  // append the data to the well
-
-  // that function (errorObject) thing.
